@@ -9,7 +9,7 @@
   text-align: center;
   color: #335500;
   background-color: #F6F6EF;
-  z-index: 1999;
+  z-index: 999999;
   right: -700px;
   top: 0;
 }
@@ -46,7 +46,7 @@
   text-indent: -100000px;
   top: 10%;
   width: 23px !important;
-  z-index: 1999;
+  z-index: 999999;
 }
 #HNupdate {
   color: yellow;
