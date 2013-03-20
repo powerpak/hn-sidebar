@@ -27,7 +27,7 @@ $(document).ready(function() {
     
     // Also try different normalizationa of trailing slashes
     if ((/\/$/).test(urls[0])) { urls.push(urls[0].replace(/\/$/, '')); }
-    if (!(/\?/).test(urls[0]) && !(/\.\w{2,4}$/).test(urls[0])) { urls.push(urls[0] + '/'); }
+    if (!(/\?/).test(urls[0]) && !(/(\.\w{2,4}|\/)$/).test(urls[0])) { urls.push(urls[0] + '/'); }
 
     var queryURL = HNSEARCH_API_URL + HNSEARCH_PARAM + urls.map(encodeURIComponent).join('&' + HNSEARCH_PARAM);
     doXHR({'action': 'get', 'url': queryURL}, function(response) {
