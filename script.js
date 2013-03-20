@@ -16,8 +16,9 @@ $(document).ready(function() {
     port.postMessage(params);
   }
 
-  function searchYC() {
-    //don't run on frames or iframes. From http://stackoverflow.com/questions/1535404/how-to-exclude-iframe-in-greasemonkey
+  function searchHN() {
+    // don't run on frames or iframes.
+    // from http://stackoverflow.com/questions/1535404/how-to-exclude-iframe-in-greasemonkey
     if (window.top != window.self) { return; }
 
     var curPath = window.location.href;
@@ -25,39 +26,35 @@ $(document).ready(function() {
 
     var queryURL = "http://api.thriftdb.com/api.hnsearch.com/items/_search?filter[fields][url][]=" + encodeURIComponent(curPath);
     doXHR({'action': 'get', 'url': queryURL}, function(response) {
-      // JSON.parse does not evaluate the attacker's scripts.
+      // JSON.parse will not evaluate any malicious JavaScript embedded into JSON
       var data = JSON.parse(response);
 
       // No results, maybe it's too new
       if (data.results.length < 1) {
         doXHR({'action':'get','url': HN_BASE + "newest"}, function(response) {
-          searchHN(response);
+          searchNewestHN(response);
         });
         return;
       }
 
-      // fetch result
+      // If there is a result, create the orange tab and panel
       var foundItem = data.results[0].item;
-      if (cutoff(foundItem.create_ts, foundItem.num_comments)) {
-        createPanel(HN_BASE + 'item?id=' + foundItem.id);
-      }
+      createPanel(HN_BASE + 'item?id=' + foundItem.id);
     });
   }
 
-  function searchHN(html) {
-    var titleAnchor = $('a[href=\'' + window.location.href.replace(/'/g, "\\'") + '\']', html);
-    var linkAnchor = titleAnchor.parent().parent().next().find('a').get(1);
+  function searchNewestHN(html) {
+    var titleAnchor = $('a[href=\'' + window.location.href.replace(/'/g, "\\'") + '\']', html),
+      linkAnchor = titleAnchor.parent().parent().next().find('a').get(1);
     if (linkAnchor) {
-      var itemURL = $(linkAnchor).attr('href');
-      createPanel(HN_BASE + itemURL);
-      return;
+      createPanel(HN_BASE + $(linkAnchor).attr('href'));
     }
   }
 
   function toggleElement(elemName) {
     var element = $(elemName);
     if (element.style.display == 'none') {
-      element.style.display = 'block'; //http://stackoverflow.com/questions/1535404/how-to-exclude-iframe-in-greasemonkey
+      element.style.display = 'block';
       return;
     }
     element.style.display = 'none';
@@ -110,7 +107,7 @@ $(document).ready(function() {
 
     HNembed.append(HNheader);
     HNembed.append(HNsite);
-    HNembed.hide()
+    HNembed.hide();
 
     $('body').append(HNtab);
     $('body').append(HNembed);
@@ -123,17 +120,7 @@ $(document).ready(function() {
       win.close();
     });
   }
-
-  function cutoff(date, points) {
-    var difference = new Date() - new Date(date);
-    var months = difference/(1000*60*60*24*30);
-    if (months > points) {
-      return false;
-    } else {
-      return true;
-    }
-  }
   
-  searchYC();
+  searchHN();
   
 });

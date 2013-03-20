@@ -9,5 +9,5 @@
    "description": "Hacker News integration for Chrome",
    "name": "Hacker News Sidebar",
    "permissions": [ "http://api.thriftdb.com/api.hnsearch.com/items/*", "https://news.ycombinator.com/*" ],
-   "version": "1.0.8"
+   "version": "1.0.9"
 }
