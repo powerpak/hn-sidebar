@@ -113,11 +113,11 @@ $(document).ready(function() {
     $('body').append(HNembed);
 
     doXHR({'action': 'get', 'url': HNurl}, function(response) {
-      var win = HNsite.get(0).contentDocument;
+      var doc = HNsite.get(0).contentDocument;
       response = response.replace(/<head>/, '<head><base target="_blank" href="'+HN_BASE+'"/>');
-      win.open();
-      win.write(response);
-      win.close();
+      doc.open();
+      doc.write(response);
+      doc.close();
     });
   }
   
