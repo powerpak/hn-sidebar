@@ -6,6 +6,8 @@
       "js": [ "jquery.js", "script.js" ],
       "matches": [ "http://*/*", "https://*/*" ]
    } ],
+   "icons": { "48": "icon-48.png",
+             "128": "icon-128.png" },
    "description": "Hacker News integration for Chrome",
    "name": "Hacker News Sidebar",
    "permissions": [ "http://api.thriftdb.com/api.hnsearch.com/items/*", "https://news.ycombinator.com/*" ],
