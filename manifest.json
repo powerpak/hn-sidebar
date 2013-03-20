@@ -10,6 +10,6 @@
              "128": "icon-128.png" },
    "description": "Hacker News integration for Chrome",
    "name": "Hacker News Sidebar",
-   "permissions": [ "http://api.thriftdb.com/api.hnsearch.com/items/*", "https://news.ycombinator.com/*" ],
-   "version": "1.0.11"
+   "permissions": [ "https://api.thriftdb.com/api.hnsearch.com/items/*", "https://news.ycombinator.com/*" ],
+   "version": "1.0.12"
 }

@@ -24,7 +24,7 @@ $(document).ready(function() {
     var curPath = window.location.href;
     if (exclude.test(curPath)) { return; }
 
-    var queryURL = "http://api.thriftdb.com/api.hnsearch.com/items/_search?filter[fields][url][]=" + encodeURIComponent(curPath);
+    var queryURL = "https://api.thriftdb.com/api.hnsearch.com/items/_search?filter[fields][url][]=" + encodeURIComponent(curPath);
     doXHR({'action': 'get', 'url': queryURL}, function(response) {
       // JSON.parse will not evaluate any malicious JavaScript embedded into JSON
       var data = JSON.parse(response);
