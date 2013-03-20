@@ -4,6 +4,8 @@
 
 You can [install this Chrome extension from the Chrome Store](https://chrome.google.com/webstore/detail/hacker-news-sidebar/ngljhffenbmdjobakjplnlbfkeabbpma).
 
+If you'd like to run your own fork of it, clone this repository and [load its directory as an unpacked extension](https://developer.chrome.com/extensions/getstarted.html#unpacked).
+
 <img src="https://raw.github.com/powerpak/hn-sidebar/master/screenshot-lg.png" width=640/>
 
 **NOTE:** This extension, by necessity, **MUST** submit the URLs of pages that you visit to http://api.thriftdb.com/ to search for the corresponding Hacker News items.  It fetches the corresponding HN comments thread via AJAX and inserts it into an `<iframe>` attached to the side of each page (because HN disallows traditional framing).  Please do not use this extension if the privacy implications of this are not acceptable or at all unclear to you!
