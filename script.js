@@ -1,11 +1,12 @@
 $(document).ready(function() {
-  var exclude = /\.(xml|txt|jpg|png|avi|mp3|pdf|mpg)$/;
+  var EXCLUDE = /\.(xml|txt|jpg|png|avi|mp3|pdf|mpg)$/,
+    HN_BASE = 'https://news.ycombinator.com/',
+    HNSEARCH_API_URL = 'https://api.thriftdb.com/api.hnsearch.com/items/_search?',
+    HNSEARCH_PARAM = 'filter[fields][url][]=';
   
   var port = chrome.extension.connect({}),
     callbacks = [];
   
-  var HN_BASE = 'https://news.ycombinator.com/';
-
   port.onMessage.addListener(function(msg) {
     callbacks[msg.id](msg.text);
     delete callbacks[msg.id];
@@ -21,10 +22,14 @@ $(document).ready(function() {
     // from http://stackoverflow.com/questions/1535404/how-to-exclude-iframe-in-greasemonkey
     if (window.top != window.self) { return; }
 
-    var curPath = window.location.href;
-    if (exclude.test(curPath)) { return; }
+    var urls = [window.location.href];
+    if (EXCLUDE.test(urls[0])) { return; }
+    
+    // Also try different normalizationa of trailing slashes
+    if ((/\/$/).test(urls[0])) { urls.push(urls[0].replace(/\/$/, '')); }
+    if (!(/\?/).test(urls[0]) && !(/\.\w{2,4}$/).test(urls[0])) { urls.push(urls[0] + '/'); }
 
-    var queryURL = "https://api.thriftdb.com/api.hnsearch.com/items/_search?filter[fields][url][]=" + encodeURIComponent(curPath);
+    var queryURL = HNSEARCH_API_URL + HNSEARCH_PARAM + urls.map(encodeURIComponent).join('&' + HNSEARCH_PARAM);
     doXHR({'action': 'get', 'url': queryURL}, function(response) {
       // JSON.parse will not evaluate any malicious JavaScript embedded into JSON
       var data = JSON.parse(response);
