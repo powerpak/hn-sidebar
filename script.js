@@ -1,7 +1,7 @@
 $(document).ready(function() {
   var EXCLUDE = /\.(xml|txt|jpg|png|avi|mp3|pdf|mpg)$/,
     HN_BASE = 'https://news.ycombinator.com/',
-    HNSEARCH_API_URL = 'https://api.thriftdb.com/api.hnsearch.com/items/_search?',
+    HNSEARCH_API_URL = 'https://api.thriftdb.com/api.hnsearch.com/items/_search?sortby=create_ts+desc&',
     HNSEARCH_PARAM = 'filter[fields][url][]=';
   
   var port = chrome.extension.connect({}),
