@@ -49,6 +49,7 @@ $(document).ready(function() {
   }
 
   function searchNewestHN(html) {
+    html = html.replace(/<img src="[^"]+"/g, '<img');
     var titleAnchor = $('a[href=\'' + window.location.href.replace(/'/g, "\\'") + '\']', html),
       linkAnchor = titleAnchor.parent().parent().next().find('a').get(1);
     if (linkAnchor) {
