@@ -49,7 +49,7 @@
   font-family: Verdana;
   font-size: 10pt;
   font-weight: bold;
-  box-shadow: 0 0 4px rgba(0,0,0,1);
+  box-shadow: 0 0 2px rgba(0,0,0,0.6);
   position: fixed;
   right: 0;
   text-align: center;
@@ -58,6 +58,9 @@
   width: 24px !important;
   height: 126px !important;
   z-index: 999999;
+}
+#HNtab:hover {
+  border-right: 1px solid #ff6600;
 }
 #HNupdate {
   color: yellow;
