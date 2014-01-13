@@ -1,7 +1,7 @@
 $(document).ready(function() {
   var EXCLUDE = /\.(xml|txt|jpg|png|avi|mp3|pdf|mpg)$/,
     HN_BASE = 'https://news.ycombinator.com/',
-    HNSEARCH_API_URL = 'https://api.thriftdb.com/api.hnsearch.com/items/_search?sortby=create_ts+desc&',
+    HNSEARCH_API_URL = 'https://api.thriftdb.com/api.hnsearch.com/items/_search?sortby=points+desc&',
     HNSEARCH_PARAM = 'filter[fields][url][]=';
   
   var port = chrome.extension.connect({}),
@@ -22,10 +22,14 @@ $(document).ready(function() {
     // from http://stackoverflow.com/questions/1535404/how-to-exclude-iframe-in-greasemonkey
     if (window.top != window.self) { return; }
 
-    var urls = [window.location.href];
+	// remove query parameters - they are rarely used on HN and often contain personal data
+    var url = window.location.href,
+		urlNoQuery = url.split('?')[0];
+
+    var urls = [urlNoQuery];
     if (EXCLUDE.test(urls[0])) { return; }
     
-    // Also try different normalizationa of trailing slashes
+    // Also try different normalization of trailing slashes
     if ((/\/$/).test(urls[0])) { urls.push(urls[0].replace(/\/$/, '')); }
     if (!(/\?/).test(urls[0]) && !(/(\.\w{2,4}|\/)$/).test(urls[0])) { urls.push(urls[0] + '/'); }
 
@@ -44,7 +48,7 @@ $(document).ready(function() {
 
       // If there is a result, create the orange tab and panel
       var foundItem = data.results[0].item;
-      createPanel(HN_BASE + 'item?id=' + foundItem.id);
+      createPanel(HN_BASE + 'item?id=' + foundItem.id, foundItem.title);
     });
   }
 
@@ -66,15 +70,16 @@ $(document).ready(function() {
     element.style.display = 'none';
   }
 
-  function createPanel(HNurl) {
+  function createPanel(HNurl, title) {
     if ($(".HNembed").length > 0) { return; } // avoid situations where multiple results might be triggered.
+
+    var tabTitle = title ? ('HN - ' + title) : 'Hacker News';
 
     var HNembed = $("<div />").attr({'id' : 'HNembed'});
     var HNsite = $("<iframe />").attr({'id' : 'HNsite', 'src' : 'about: blank'});
-    var HNtab = $("<div>HackerNews</div>").attr({'id' : 'HNtab'});
+    var HNtab = $("<div>Hacker News</div>").attr({'id' : 'HNtab'});
 
-    var panelTitle = ">>> <b>Hacker News</b> >>>";
-    var HNtitle = $("<span>" + panelTitle + "</span>").attr({'id' : 'HNtitle'});
+    var HNtitle = $('<span id="HNtitleNormal">' + tabTitle + '</span><span id="HNtitleHover">Hide</span>');
     var HNheader = $("<div/>").attr({'id' : 'HNheader'});
 
     $(window).resize(fixIframeHeight);
@@ -90,19 +95,23 @@ $(document).ready(function() {
       var embedPosition = openPanel ? "0px" : "-700px";
       var tabPosition = openPanel ? "-25px" : "0px";
 
+	  var easing = "swing",
+		  tabAnimationTime = 50,
+		  embedAnimationTime = 100;
+
       if (openPanel) {
         fixIframeHeight();
-        HNtab.animate({right: tabPosition}, 150, "linear", function() {
-          HNembed.show();
+        HNtab.animate({right: tabPosition}, tabAnimationTime, easing, function() {
           HNtab.hide();
-          HNembed.animate({right: embedPosition},400,"linear");
         });
+		HNembed.show();
+		HNembed.animate({right: embedPosition}, embedAnimationTime,easing);
       } else {
-        HNembed.animate({right: embedPosition}, 400, "linear", function() {
-          HNtab.show();
-          HNembed.hide();
-          HNtab.animate({right: tabPosition}, 150, "linear");
+        HNembed.animate({right: embedPosition}, embedAnimationTime, easing, function() {
+		  HNembed.hide();
         });
+		HNtab.show();
+		HNtab.animate({right: tabPosition}, tabAnimationTime, easing);
       }
     }
 
