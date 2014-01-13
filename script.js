@@ -46,9 +46,10 @@ $(document).ready(function() {
         return;
       }
 
+      console.log(data);
       // If there is a result, create the orange tab and panel
       var foundItem = data.results[0].item;
-      createPanel(HN_BASE + 'item?id=' + foundItem.id);
+      createPanel(HN_BASE + 'item?id=' + foundItem.id, foundItem.title);
     });
   }
 
@@ -70,15 +71,16 @@ $(document).ready(function() {
     element.style.display = 'none';
   }
 
-  function createPanel(HNurl) {
+  function createPanel(HNurl, title) {
     if ($(".HNembed").length > 0) { return; } // avoid situations where multiple results might be triggered.
+
+    var tabTitle = title ? ('HN - ' + title) : 'Hacker News';
 
     var HNembed = $("<div />").attr({'id' : 'HNembed'});
     var HNsite = $("<iframe />").attr({'id' : 'HNsite', 'src' : 'about: blank'});
-    var HNtab = $("<div>HackerNews</div>").attr({'id' : 'HNtab'});
+    var HNtab = $("<div>Hacker News</div>").attr({'id' : 'HNtab'});
 
-    var panelTitle = ">>> <b>Hacker News</b> >>>";
-    var HNtitle = $("<span>" + panelTitle + "</span>").attr({'id' : 'HNtitle'});
+    var HNtitle = $('<span id="HNtitleNormal">' + tabTitle + '</span><span id="HNtitleHover">Hide</span>');
     var HNheader = $("<div/>").attr({'id' : 'HNheader'});
 
     $(window).resize(fixIframeHeight);
@@ -94,19 +96,23 @@ $(document).ready(function() {
       var embedPosition = openPanel ? "0px" : "-700px";
       var tabPosition = openPanel ? "-25px" : "0px";
 
+	  var easing = "swing",
+		  tabAnimationTime = 50,
+		  embedAnimationTime = 100;
+
       if (openPanel) {
         fixIframeHeight();
-        HNtab.animate({right: tabPosition}, 150, "linear", function() {
-          HNembed.show();
+        HNtab.animate({right: tabPosition}, tabAnimationTime, easing, function() {
           HNtab.hide();
-          HNembed.animate({right: embedPosition},400,"linear");
         });
+		HNembed.show();
+		HNembed.animate({right: embedPosition}, embedAnimationTime,easing);
       } else {
-        HNembed.animate({right: embedPosition}, 400, "linear", function() {
-          HNtab.show();
-          HNembed.hide();
-          HNtab.animate({right: tabPosition}, 150, "linear");
+        HNembed.animate({right: embedPosition}, embedAnimationTime, easing, function() {
+		  HNembed.hide();
         });
+		HNtab.show();
+		HNtab.animate({right: tabPosition}, tabAnimationTime, easing);
       }
     }
 
