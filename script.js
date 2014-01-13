@@ -46,7 +46,6 @@ $(document).ready(function() {
         return;
       }
 
-      console.log(data);
       // If there is a result, create the orange tab and panel
       var foundItem = data.results[0].item;
       createPanel(HN_BASE + 'item?id=' + foundItem.id, foundItem.title);
