@@ -22,11 +22,8 @@ $(document).ready(function() {
     // from http://stackoverflow.com/questions/1535404/how-to-exclude-iframe-in-greasemonkey
     if (window.top != window.self) { return; }
 
-  // remove query parameters - they are rarely used on HN and often contain personal data
-    var url = window.location.href,
-    urlNoQuery = url.split('?')[0];
-
-    var urls = [urlNoQuery];
+    // remove query parameters - they are rarely used on HN and often contain personal data
+    var urls = [window.location.href.split('?')[0]];
     if (EXCLUDE.test(urls[0])) { return; }
     
     // Also try different normalization of trailing slashes
