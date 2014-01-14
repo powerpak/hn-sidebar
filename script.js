@@ -22,9 +22,9 @@ $(document).ready(function() {
     // from http://stackoverflow.com/questions/1535404/how-to-exclude-iframe-in-greasemonkey
     if (window.top != window.self) { return; }
 
-	// remove query parameters - they are rarely used on HN and often contain personal data
+  // remove query parameters - they are rarely used on HN and often contain personal data
     var url = window.location.href,
-		urlNoQuery = url.split('?')[0];
+    urlNoQuery = url.split('?')[0];
 
     var urls = [urlNoQuery];
     if (EXCLUDE.test(urls[0])) { return; }
@@ -95,23 +95,23 @@ $(document).ready(function() {
       var embedPosition = openPanel ? "0px" : "-700px";
       var tabPosition = openPanel ? "-25px" : "0px";
 
-	  var easing = "swing",
-		  tabAnimationTime = 50,
-		  embedAnimationTime = 100;
+    var easing = "swing",
+      tabAnimationTime = 50,
+      embedAnimationTime = 100;
 
       if (openPanel) {
         fixIframeHeight();
         HNtab.animate({right: tabPosition}, tabAnimationTime, easing, function() {
           HNtab.hide();
         });
-		HNembed.show();
-		HNembed.animate({right: embedPosition}, embedAnimationTime,easing);
+    HNembed.show();
+    HNembed.animate({right: embedPosition}, embedAnimationTime,easing);
       } else {
         HNembed.animate({right: embedPosition}, embedAnimationTime, easing, function() {
-		  HNembed.hide();
+      HNembed.hide();
         });
-		HNtab.show();
-		HNtab.animate({right: tabPosition}, tabAnimationTime, easing);
+    HNtab.show();
+    HNtab.animate({right: tabPosition}, tabAnimationTime, easing);
       }
     }
 
