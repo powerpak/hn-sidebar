@@ -1,7 +1,7 @@
 $(document).ready(function() {
   var EXCLUDE = /\.(xml|txt|jpg|png|avi|mp3|pdf|mpg)$/,
     HN_BASE = 'https://news.ycombinator.com/',
-    HNSEARCH_API_URL = 'https://hn.algolia.com/api/v1/search?',
+    HNSEARCH_API_URL = 'https://hn.algolia.com/api/v1/search?tags=story&',
     HNSEARCH_PARAM = 'query=';
   
   var port = chrome.extension.connect({}),
@@ -22,27 +22,36 @@ $(document).ready(function() {
     // from http://stackoverflow.com/questions/1535404/how-to-exclude-iframe-in-greasemonkey
     if (window.top != window.self) { return; }
 
-    var urls = [window.location.href];
+    var urls = [window.location.href],
+      urlWithoutSlash = urls[0].replace(/\/$/, "");
     if (EXCLUDE.test(urls[0])) { return; }
     
-    // TODO: find a way to search algolia by URL.  Right now it is keyword searching only,
-    //       which will produce some false positives.
+    // TODO: find a way to search algolia by URL.  Right now it is keyword searching only.
+    // Therefore we need to filter the matches by URL.
 
     var queryURL = HNSEARCH_API_URL + HNSEARCH_PARAM + urls.map(encodeURIComponent).join('&' + HNSEARCH_PARAM);
     doXHR({'action': 'get', 'url': queryURL}, function(response) {
       // JSON.parse will not evaluate any malicious JavaScript embedded into JSON
-      var data = JSON.parse(response);
+      var data = JSON.parse(response),
+        matches;
+      
+      // We have to filter the matches by URL and sort by comment number
+      matches = data.hits.filter(function(hit) {
+        return hit.url && hit.url.replace(/\/$/, "") == urlWithoutSlash;
+      }).sort(function(l, r) {
+        return r.num_comments - l.num_comments;
+      });
 
       // No results, maybe it's too new
-      if (data.hits.length < 1) {
-        doXHR({'action':'get','url': HN_BASE + "newest"}, function(response) {
+      if (matches.length == 0) {
+        doXHR({'action':'get', 'url': HN_BASE + "newest"}, function(response) {
           searchNewestHN(response);
         });
         return;
       }
 
       // If there is a result, create the orange tab and panel
-      var foundItem = data.hits[0];
+      var foundItem = matches[0];
       createPanel(HN_BASE + 'item?id=' + foundItem.objectID, foundItem.title);
     });
   }
