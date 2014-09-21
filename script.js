@@ -1,8 +1,8 @@
 $(document).ready(function() {
   var EXCLUDE = /\.(xml|txt|jpg|png|avi|mp3|pdf|mpg)$/,
     HN_BASE = 'https://news.ycombinator.com/',
-    HNSEARCH_API_URL = 'https://api.thriftdb.com/api.hnsearch.com/items/_search?sortby=points+desc&',
-    HNSEARCH_PARAM = 'filter[fields][url][]=';
+    HNSEARCH_API_URL = 'https://hn.algolia.com/api/v1/search?tags=story&',
+    HNSEARCH_PARAM = 'query=';
   
   var port = chrome.extension.connect({}),
     callbacks = [];
@@ -22,33 +22,37 @@ $(document).ready(function() {
     // from http://stackoverflow.com/questions/1535404/how-to-exclude-iframe-in-greasemonkey
     if (window.top != window.self) { return; }
 
-	// remove query parameters - they are rarely used on HN and often contain personal data
-    var url = window.location.href,
-		urlNoQuery = url.split('?')[0];
-
-    var urls = [urlNoQuery];
+    var urls = [window.location.href],
+      urlWithoutSlash = urls[0].replace(/\/$/, "");
     if (EXCLUDE.test(urls[0])) { return; }
     
-    // Also try different normalization of trailing slashes
-    if ((/\/$/).test(urls[0])) { urls.push(urls[0].replace(/\/$/, '')); }
-    if (!(/\?/).test(urls[0]) && !(/(\.\w{2,4}|\/)$/).test(urls[0])) { urls.push(urls[0] + '/'); }
+    // TODO: find a way to search algolia by URL.  Right now it is keyword searching only.
+    // Therefore we need to filter the matches by URL.
 
     var queryURL = HNSEARCH_API_URL + HNSEARCH_PARAM + urls.map(encodeURIComponent).join('&' + HNSEARCH_PARAM);
     doXHR({'action': 'get', 'url': queryURL}, function(response) {
       // JSON.parse will not evaluate any malicious JavaScript embedded into JSON
-      var data = JSON.parse(response);
+      var data = JSON.parse(response),
+        matches;
+      
+      // We have to filter the matches by URL and sort by comment number
+      matches = data.hits.filter(function(hit) {
+        return hit.url && hit.url.replace(/\/$/, "") == urlWithoutSlash;
+      }).sort(function(l, r) {
+        return r.num_comments - l.num_comments;
+      });
 
       // No results, maybe it's too new
-      if (data.results.length < 1) {
-        doXHR({'action':'get','url': HN_BASE + "newest"}, function(response) {
+      if (matches.length == 0) {
+        doXHR({'action':'get', 'url': HN_BASE + "newest"}, function(response) {
           searchNewestHN(response);
         });
         return;
       }
 
       // If there is a result, create the orange tab and panel
-      var foundItem = data.results[0].item;
-      createPanel(HN_BASE + 'item?id=' + foundItem.id, foundItem.title);
+      var foundItem = matches[0];
+      createPanel(HN_BASE + 'item?id=' + foundItem.objectID, foundItem.title);
     });
   }
 
@@ -95,23 +99,23 @@ $(document).ready(function() {
       var embedPosition = openPanel ? "0px" : "-700px";
       var tabPosition = openPanel ? "-25px" : "0px";
 
-	  var easing = "swing",
-		  tabAnimationTime = 50,
-		  embedAnimationTime = 100;
+    var easing = "swing",
+      tabAnimationTime = 50,
+      embedAnimationTime = 100;
 
       if (openPanel) {
         fixIframeHeight();
         HNtab.animate({right: tabPosition}, tabAnimationTime, easing, function() {
           HNtab.hide();
         });
-		HNembed.show();
-		HNembed.animate({right: embedPosition}, embedAnimationTime,easing);
+    HNembed.show();
+    HNembed.animate({right: embedPosition}, embedAnimationTime,easing);
       } else {
         HNembed.animate({right: embedPosition}, embedAnimationTime, easing, function() {
-		  HNembed.hide();
+      HNembed.hide();
         });
-		HNtab.show();
-		HNtab.animate({right: tabPosition}, tabAnimationTime, easing);
+    HNtab.show();
+    HNtab.animate({right: tabPosition}, tabAnimationTime, easing);
       }
     }
 
