@@ -89,6 +89,7 @@ $(document).ready(function () {
 		var HNsite = $("<iframe />").attr({'id': 'HNsite', 'src': 'about: blank'});
 		var HNtabText = $("<div>Hacker News</div>").attr({'id': 'HNtabText'});
 		var HNtab = $("<div></div>").attr({'id': 'HNtab'});
+		var HNtabWrap = $("<div></div>").attr({'id': 'HNtabWrap'});
 
 		// var HNtitle = $('<span id="HNtitleNormal">' + tabTitle + '</span><span id="HNtitleHover">Hide</span>');
 		// var HNheader = $("<div/>").attr({'id': 'HNheader'});
@@ -114,19 +115,22 @@ $(document).ready(function () {
 
 			if (openPanel) {
 				fixIframeHeight();
-				HNtab.animate({right: tabPosition}, tabAnimationTime, easing, function () {
+				HNtabWrap.animate({right: tabPosition}, tabAnimationTime, easing, function () {
 					// HNtab.hide();
 					HNtabText.text('Close HN ×');
 				});
 				HNembed.show();
 				HNembed.animate({right: embedPosition}, embedAnimationTime, easing);
+				HNtabWrap.addClass('hntab-open');
 			} else {
 				HNembed.animate({right: embedPosition}, embedAnimationTime, easing, function () {
 					HNembed.hide();
 				});
-				// HNtab.show();
-				HNtabText.text('Hacker News');
-				HNtab.animate({right: tabPosition}, tabAnimationTime, easing);
+				HNtabWrap.animate({right: tabPosition}, tabAnimationTime, easing, function() {
+					// HNtab.show();
+					HNtabText.text('Hacker News');
+				});
+				HNtabWrap.removeClass('hntab-open');
 			}
 		}
 
@@ -139,10 +143,11 @@ $(document).ready(function () {
 		HNembed.append(HNsite);
 
 		HNtab.append(HNtabText);
+		HNtabWrap.append(HNtab);
 
 		HNembed.hide();
 
-		$('body').append(HNtab);
+		$('body').append(HNtabWrap);
 		$('body').append(HNembed);
 
 		doXHR({'action': 'get', 'url': HNurl}, function (response) {

@@ -40,28 +40,36 @@
 #HNheader:hover #HNtitleNormal {
 	display: none !important;
 }
+#HNtabWrap {
+  position: fixed;
+  top: 10%;
+  right: 0px;
+
+  width: 24px !important;
+  height: 126px !important;
+
+  z-index: 999999;
+}
 #HNtab {
+  position: absolute;
+  top: 0;
+  right: -1px;
+
+  width: 25px !important;
+  height: 126px !important;
+
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAElBMVEX1fij3lk34p2j/WwH/38P///8isivPAAAAPklEQVR4AWNgxgHwSbBiARAJTOV0lmBlwiXBysqI3SgmFlYWJux2MEH8RqwEA8IoTMuJcO7ABiKeqCU9lQAAxQEHekU4N18AAAAASUVORK5CYII=);
   background-repeat: no-repeat;
-  background-position: bottom center;
+  background-position: bottom left;
   background-color: #FF6600;
   clear: both;
   color: #222222;
   cursor: pointer;
   font-weight: bold;
   box-shadow: 0 0 2px rgba(0,0,0,0.6);
-  position: fixed;
-  right: 0;
   text-align: center;
   text-indent: -100000px;
-  top: 10%;
-  width: 24px !important;
-  height: 126px !important;
-  z-index: 999999;
   overflow: hidden; /* not sure why, but this helps show the text :) */
-}
-#HNtab:hover {
-  border-right: 1px solid #ff6600;
 }
 #HNtab #HNtabText {
   transform: rotate(-90deg);
@@ -80,6 +88,13 @@
   font-family: Verdana, sans-serif;
   font-size: 9pt;
 }
+#HNtabWrap:hover #HNtab {
+  right: 0px;
+}
+#HNtabWrap.hntab-open:hover #HNtab {
+  right: -2px;
+}
+
 #HNupdate {
   color: yellow;
   margin-left: 10px;
