@@ -58,6 +58,8 @@
   width: 25px !important;
   height: 126px !important;
 
+  line-height: 24px;
+
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAElBMVEX1fij3lk34p2j/WwH/38P///8isivPAAAAPklEQVR4AWNgxgHwSbBiARAJTOV0lmBlwiXBysqI3SgmFlYWJux2MEH8RqwEA8IoTMuJcO7ABiKeqCU9lQAAxQEHekU4N18AAAAASUVORK5CYII=);
   background-repeat: no-repeat;
   background-position: bottom left;
@@ -66,7 +68,7 @@
   color: #222222;
   cursor: pointer;
   font-weight: bold;
-  box-shadow: 0 0 2px rgba(0,0,0,0.6);
+  box-shadow: 0 0 2px rgba(0,0,0,0.3);
   text-align: center;
   text-indent: -100000px;
   overflow: hidden; /* not sure why, but this helps show the text :) */
@@ -79,7 +81,7 @@
   height: 16px;
   width: 95px;
 
-  left: 20px;
+  left: 16px;
   top: 86px;
 
   text-align: right;
@@ -88,11 +90,16 @@
   font-family: Verdana, sans-serif;
   font-size: 9pt;
 }
+#HNtabWrap:hover {
+  /*box-shadow: 0 0 2px rgba(0,0,0,0.6);*/
+}
 #HNtabWrap:hover #HNtab {
-  right: 0px;
+  /*right: 0px;*/
+  transform: translate3d(-1px, 0, 0);
 }
 #HNtabWrap.hntab-open:hover #HNtab {
-  right: -2px;
+  /*right: -2px;*/
+  transform: translate3d(1px, 0, 0);
 }
 
 #HNupdate {
