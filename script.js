@@ -87,7 +87,8 @@ $(document).ready(function () {
 
 		var HNembed = $("<div />").attr({'id': 'HNembed'});
 		var HNsite = $("<iframe />").attr({'id': 'HNsite', 'src': 'about: blank'});
-		var HNtab = $("<div>Hacker News</div>").attr({'id': 'HNtab'});
+		var HNtabText = $("<div>Hacker News</div>").attr({'id': 'HNtabText'});
+		var HNtab = $("<div></div>").attr({'id': 'HNtab'});
 
 		// var HNtitle = $('<span id="HNtitleNormal">' + tabTitle + '</span><span id="HNtitleHover">Hide</span>');
 		// var HNheader = $("<div/>").attr({'id': 'HNheader'});
@@ -115,7 +116,7 @@ $(document).ready(function () {
 				fixIframeHeight();
 				HNtab.animate({right: tabPosition}, tabAnimationTime, easing, function () {
 					// HNtab.hide();
-					HNtab.text('Close ×');
+					HNtabText.text('Close HN ×');
 				});
 				HNembed.show();
 				HNembed.animate({right: embedPosition}, embedAnimationTime, easing);
@@ -124,7 +125,7 @@ $(document).ready(function () {
 					HNembed.hide();
 				});
 				// HNtab.show();
-				HNtab.text('Hacker News');
+				HNtabText.text('Hacker News');
 				HNtab.animate({right: tabPosition}, tabAnimationTime, easing);
 			}
 		}
@@ -136,6 +137,9 @@ $(document).ready(function () {
 
 		// HNembed.append(HNheader); -- no header
 		HNembed.append(HNsite);
+
+		HNtab.append(HNtabText);
+
 		HNembed.hide();
 
 		$('body').append(HNtab);
