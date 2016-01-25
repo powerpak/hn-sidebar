@@ -3,7 +3,7 @@
    "background": {"scripts": ["xhr_handler.js"]},
    "content_scripts": [ {
       "css": [ "hn.css" ],
-      "js": [ "jquery.js", "script.js" ],
+      "js": [ "zepto.min.js", "script.js" ],
       "matches": [ "http://*/*", "https://*/*" ]
    } ],
    "icons": { "48": "icon-48.png",

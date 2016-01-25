@@ -12,4 +12,8 @@ If you'd like to run your own fork of it, clone this repository and [load its di
 
 This is a resuscitation of [an old extension](https://chrome.google.com/webstore/detail/hacker-news-sidebar/hhedbplnihmkekhgmaoikgfbkjjaocnl?hl=en) of the same name by [Omer Gertel](http://www.omergertel.com) that no longer functions due to changes in APIs and HN's move to HTTPS.  Details on the search API used by this extension are available [from HNSearch](https://www.hnsearch.com/api).
 
+**NOTE:** [Zepto](https://github.com/madrobby/zepto) is packed with following modules:
+
+		MODULES="zepto event fx selector" npm run-script dist
+
 This source is released under an [MIT license](http://en.wikipedia.org/wiki/MIT_license); see LICENSE.txt for the full text.
