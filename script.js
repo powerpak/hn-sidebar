@@ -165,7 +165,7 @@ $(document).ready(function () {
 			response = response
 				// replace non-absolute urls
 				.replace(/(href|src)="((https?:(\/|&#x2F;){2})?)([^"]*)/g, function(match, attr, protocolInner, protocol, protocolSlashSingle, url) {
-					console.log('replace:', arguments);
+					// console.log('replace:', arguments);
 					if (protocol) {
 						return match;
 					} else {
