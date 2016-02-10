@@ -152,7 +152,13 @@ $(document).ready(function () {
 
 		doXHR({'action': 'get', 'url': HNurl}, function (response) {
 			var doc = HNsite.get(0).contentDocument;
-			response = response.replace(/<head>/, '<head><base target="_blank" href="' + HN_BASE + '"/>');
+			response = response
+				// replace non-absolute urls
+				.replace(/(href|src)="([a-zA-Z0-9][^"]*)/g, function(match, attr, url) {
+					return attr + '="https://news.ycombinator.com/' + url;
+				})
+				.replace(/<head>/, '<head><base target="_blank" href="' + HN_BASE + '"/>')
+			;
 			doc.open();
 			doc.write(response);
 			doc.close();
