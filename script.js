@@ -152,10 +152,28 @@ $(document).ready(function () {
 
 		doXHR({'action': 'get', 'url': HNurl}, function (response) {
 			var doc = HNsite.get(0).contentDocument;
+
+			/*
+			var staticFiles = [
+				'favicon.ico',
+				'grayarrow.gif',
+				's.gif',
+				'y18.gif'
+			];
+			*/
+
 			response = response
 				// replace non-absolute urls
 				.replace(/(href|src)="([a-zA-Z0-9][^"]*)/g, function(match, attr, url) {
-					return attr + '="https://news.ycombinator.com/' + url;
+					var fixedUrl = '//news.ycombinator.com/' + url;
+					/*
+					// aha, so the hotlinking workaround isn't needed, as we are fighting the hotlink protection of hosting page, not of ycombinator.com :(
+					if (staticFiles.indexOf(url) !== -1) {
+						fixedUrl = 'https://cdn.rawgit.com/tkafka/hn-sidebar/master/hn-media/' + url;
+					}
+					*/
+
+					return attr + '="' + fixedUrl;
 				})
 				.replace(/<head>/, '<head><base target="_blank" href="' + HN_BASE + '"/>')
 			;
