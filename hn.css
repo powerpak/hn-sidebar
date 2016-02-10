@@ -1,3 +1,7 @@
+#HNembed, #HNtabWrap {
+  z-index: 9999999;
+}
+
 #HNembed {
   position: fixed;
   clear: both;
@@ -9,7 +13,6 @@
   text-align: center;
   color: #335500;
   background-color: #F6F6EF;
-  z-index: 999999;
   right: -700px;
   top: 0;
 }
@@ -47,8 +50,6 @@
 
   width: 24px !important;
   height: 126px !important;
-
-  z-index: 999999;
 }
 #HNtab {
   position: absolute;
