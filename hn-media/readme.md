@@ -1,0 +1,1 @@
+This is a folder with mirror of image resources that HN prevent from hotlinking.
