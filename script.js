@@ -164,16 +164,21 @@ $(document).ready(function () {
 
 			response = response
 				// replace non-absolute urls
-				.replace(/(href|src)="([a-zA-Z0-9][^"]*)/g, function(match, attr, url) {
-					var fixedUrl = '//news.ycombinator.com/' + url;
-					/*
-					// aha, so the hotlinking workaround isn't needed, as we are fighting the hotlink protection of hosting page, not of ycombinator.com :(
-					if (staticFiles.indexOf(url) !== -1) {
-						fixedUrl = 'https://cdn.rawgit.com/tkafka/hn-sidebar/master/hn-media/' + url;
-					}
-					*/
+				.replace(/(href|src)="((https?:(\/|&#x2F;){2})?)([^"]*)/g, function(match, attr, protocolInner, protocol, protocolSlashSingle, url) {
+					console.log('replace:', arguments);
+					if (protocol) {
+						return match;
+					} else {
+						var fixedUrl = '//news.ycombinator.com/' + url;
+						/*
+						 // aha, so the hotlinking workaround isn't needed, as we are fighting the hotlink protection of hosting page, not of ycombinator.com :(
+						 if (staticFiles.indexOf(url) !== -1) {
+						 fixedUrl = 'https://cdn.rawgit.com/tkafka/hn-sidebar/master/hn-media/' + url;
+						 }
+						 */
 
-					return attr + '="' + fixedUrl;
+						return attr + '="' + fixedUrl;
+					}
 				})
 				.replace(/<head>/, '<head><base target="_blank" href="' + HN_BASE + '"/>')
 			;
