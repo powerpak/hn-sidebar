@@ -8,8 +8,8 @@
    } ],
    "icons": { "48": "icon-48.png",
              "128": "icon-128.png" },
-   "description": "Hacker News integration for Chrome",
-   "name": "Hacker News Sidebar",
+   "description": "See a tab with a Hacker news disussion for every page ever discussed on Hacker News.",
+   "name": "Hacker News Sidebar++",
    "permissions": [ "https://api.thriftdb.com/api.hnsearch.com/items/*", "https://news.ycombinator.com/*" ],
-   "version": "1.0.19"
+   "version": "1.0.20"
 }
